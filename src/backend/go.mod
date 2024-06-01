@@ -1,4 +1,4 @@
-module main
+module fly_easy
 
 go 1.21.9
 
