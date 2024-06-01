@@ -5,32 +5,31 @@ import (
 	"fly_easy/config"
 	"fmt"
 	"log"
-  _"time"
+	_ "time"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-
 type Customer struct {
-  ID          int
-  Name        string
-  LastName    string
-  SurName     string
-  Email       string
-  PhoneNumber int
-};
+	ID          int
+	Name        string
+	LastName    string
+	SurName     string
+	Email       string
+	PhoneNumber int
+}
 
-type Ticket struct{ 
-  ID            int
-  CustomerID    int
-  DepartlocID   int
-  ArrivelocID   int
-  Price         int
-  Airline       string
-  Deptime       string
-  DepDate       string
-  Chcode        string
-  TimeTaken     string
+type Ticket struct {
+	ID          int
+	CustomerID  int
+	DepartlocID int
+	ArrivelocID int
+	Price       int
+	Airline     string
+	Deptime     string
+	DepDate     string
+	Chcode      string
+	TimeTaken   string
 }
 
 type Location struct {
@@ -41,7 +40,7 @@ type Location struct {
 type IDataBase interface {
 	Connect()
 	Close()
-  // Query()
+	// Query()
 	GetCustomer()
 	GetTicket()
 	GetLocation()
@@ -73,7 +72,7 @@ func (d *DB) Close() {
 
 func (d *DB) GetCustomer() {
 	db := d.db
-  query := "SELECT * FROM CUSTOMERS"
+	query := "SELECT * FROM CUSTOMERS"
 	rows, err := db.Query(query)
 	if err != nil {
 		log.Fatalf("Не удалось выполнить запрос: %v", err)
@@ -82,18 +81,18 @@ func (d *DB) GetCustomer() {
 	for rows.Next() {
 		var customer Customer
 		err := rows.Scan(
-      &customer.ID, &customer.Name,
-      &customer.LastName, &customer.SurName,
-      &customer.Email, &customer.PhoneNumber,
-      )
+			&customer.ID, &customer.Name,
+			&customer.LastName, &customer.SurName,
+			&customer.Email, &customer.PhoneNumber,
+		)
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
 		fmt.Printf("{%v, %v, %v, %v, %v, %v}\n",
-      customer.ID, customer.Name,
-      customer.LastName, customer.SurName,
-      customer.Email, customer.PhoneNumber,
-      )
+			customer.ID, customer.Name,
+			customer.LastName, customer.SurName,
+			customer.Email, customer.PhoneNumber,
+		)
 	}
 
 	err = rows.Err()
@@ -104,7 +103,7 @@ func (d *DB) GetCustomer() {
 
 func (d *DB) GetTicket() {
 	db := d.db
-  query := "SELECT * FROM TICKET"
+	query := "SELECT * FROM TICKET"
 	rows, err := db.Query(query)
 	if err != nil {
 		log.Fatalf("Не удалось выполнить запрос: %v", err)
@@ -113,22 +112,22 @@ func (d *DB) GetTicket() {
 	for rows.Next() {
 		var ticket Ticket
 		err := rows.Scan(
-      &ticket.ID, &ticket.CustomerID,
-      &ticket.DepartlocID, &ticket.ArrivelocID,
-      &ticket.Price, &ticket.Airline,
-      &ticket.Deptime, &ticket.DepDate,
-      &ticket.Chcode, &ticket.TimeTaken,
-      )
+			&ticket.ID, &ticket.CustomerID,
+			&ticket.DepartlocID, &ticket.ArrivelocID,
+			&ticket.Price, &ticket.Airline,
+			&ticket.Deptime, &ticket.DepDate,
+			&ticket.Chcode, &ticket.TimeTaken,
+		)
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
 		fmt.Printf("{%v, %v,%v, %v, %v, %v, %v, %v, %v, %v}\n",
-      ticket.ID, ticket.CustomerID,
-      ticket.DepartlocID, ticket.ArrivelocID,
-      ticket.Price, ticket.Airline,
-      ticket.Deptime, ticket.DepDate,
-      ticket.Chcode, ticket.TimeTaken,
-      )
+			ticket.ID, ticket.CustomerID,
+			ticket.DepartlocID, ticket.ArrivelocID,
+			ticket.Price, ticket.Airline,
+			ticket.Deptime, ticket.DepDate,
+			ticket.Chcode, ticket.TimeTaken,
+		)
 	}
 
 	err = rows.Err()
@@ -139,7 +138,7 @@ func (d *DB) GetTicket() {
 
 func (d *DB) GetLocation() {
 	db := d.db
-  query := "SELECT ID, LOCATIONNAME FROM LOCATION"
+	query := "SELECT ID, LOCATIONNAME FROM LOCATION"
 	rows, err := db.Query(query)
 	if err != nil {
 		log.Fatalf("Не удалось выполнить запрос: %v", err)
@@ -163,8 +162,8 @@ func (d *DB) GetLocation() {
 func Tmp() {
 	db := DB{Url: config.DBUrl}
 	db.Connect()
-  db.GetTicket()
-  // db.GetCustomer()
+	db.GetTicket()
+	// db.GetCustomer()
 	// db.GetLocation()
 	db.Close()
 }
