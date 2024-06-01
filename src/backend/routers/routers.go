@@ -14,22 +14,23 @@ func GetRouter() *mux.Router {
 	apiPost := api.PathPrefix("/Post/").Subrouter()
 	apiDelete := api.PathPrefix("/Delete/").Subrouter()
 	apiPut := api.PathPrefix("/Put/").Subrouter()
+
 	api.HandleFunc("/GetLocation", handlers.Handler)
 
-	apiGet.HandleFunc("LocationsList", handlers.GetLocationsList)
-	apiGet.HandleFunc("UserInfo", handlers.GetUserInfo)
-	apiGet.HandleFunc("UserTickets", handlers.GetUsersTickets)
-	apiGet.HandleFunc("UsersFavorites)", handlers.GetUsersFavorites)
-	apiGet.HandleFunc("UserByEmail)", handlers.GetUserByEmail)
-	apiGet.HandleFunc("SearchTickets)", handlers.GetSearchTickets)
+	apiGet.HandleFunc("/LocationsList", handlers.GetLocationsList)
+	apiGet.HandleFunc("/UserInfo", handlers.GetUserInfo)
+	apiGet.HandleFunc("/UserTickets", handlers.GetUsersTickets)
+	apiGet.HandleFunc("/UsersFavorites", handlers.GetUsersFavorites)
+	apiGet.HandleFunc("/UserByEmail", handlers.GetUserByEmail)
+	apiGet.HandleFunc("/SearchTickets", handlers.GetSearchTickets)
 
-	apiPost.HandleFunc("User)", handlers.AddUser)
-	apiPost.HandleFunc("ToFavorite)", handlers.AddToFavorite)
+	apiPost.HandleFunc("/User", handlers.AddUser)
+	apiPost.HandleFunc("/ToFavorite", handlers.AddToFavorite)
 
-	apiPut.HandleFunc("UserProfile)", handlers.UpdateUserProfile)
-	apiPut.HandleFunc("UserPassword)", handlers.UpdateUserPassword)
+	apiPut.HandleFunc("/UserProfile", handlers.UpdateUserProfile)
+	apiPut.HandleFunc("/UserPassword", handlers.UpdateUserPassword)
 
-	apiDelete.HandleFunc("User)", handlers.DeleteUser)
-	apiDelete.HandleFunc("FromFavorite)", handlers.DeleteFromFavorite)
+	apiDelete.HandleFunc("/User", handlers.DeleteUser)
+	apiDelete.HandleFunc("/FromFavorite", handlers.DeleteFromFavorite)
 	return r
 }
