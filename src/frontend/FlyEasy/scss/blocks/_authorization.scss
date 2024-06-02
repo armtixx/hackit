@@ -1,0 +1,231 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    background-color: $white;
+}
+
+header {
+    background-color: $white;
+    padding: 20px 0;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo .logo-text {
+    color: $dark;
+}
+
+.logo .logo-highlight {
+    color: $orange;
+}
+
+.main_autho {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.login-section {
+    margin: 0 auto;
+    background: $white;
+    padding: 30px;
+    // border-radius: 8px;
+    // box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    width: 345px;
+    height: 465px;
+}
+
+.login-section h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 24px;
+    margin-top: 20px;
+}
+
+.login-section p {
+    margin-bottom: 10px;
+    width: 305px;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.login-section form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-section form label {
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.login-section form input {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    width: Fill (313px)px;
+    height: Hug (48px)px;
+    padding: 12px 16px 12px 16px;
+    gap: 0px;
+    opacity: 0px;
+}
+
+.login-section form .forgot-password {
+    margin-bottom: 15px;
+    color: $dark;
+    text-decoration: none;
+    text-align: left;
+}
+
+.login-section form .forgot-password:hover {
+    text-decoration: underline;
+}
+
+.login-section form button {
+    padding: 10px;
+    background: $orange;
+    color: $white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+.login-section form button:hover {
+    background: $orange;
+}
+
+.login-section p a {
+    color: $orange;
+    text-decoration: none;
+}
+
+.login-section p a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    header .container,
+    main .container {
+        width: 95%;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav ul li {
+        margin-left: 0;
+        margin-bottom: 10px;
+    }
+}
+
+.logo_autho {
+    height: 50px;
+    width: 50px;
+}
+
+// Форма регистрации 
+.login-section form .required {
+    color: $orange;
+    font-weight: bold;
+}
+
+.register-section form .orange-text {
+    color: $orange;
+    text-decoration: none;
+}
+
+.login-section p {
+    text-align: left;
+    width: 300px;
+    font-size: 14px;
+}
+
+.login-section h2 {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 14px;
+}
+
+.login-section label {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 14px;
+}
+
+// Регистрация обработка ошибок
+
+.form_reg {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+.form_reg label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form_reg input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.form_reg input:focus {
+    border-color: #007BFF;
+    outline: none;
+}
+
+.password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    display: none;
+}
+
+.form_reg button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.form_reg button:hover {
+    background-color: #0056b3;
+}

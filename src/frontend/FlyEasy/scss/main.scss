@@ -1,0 +1,38 @@
+// Base style
+//Порядок подключения важен
+//Обнуление стилей
+@import './base/reset';
+//Переменные
+@import './base/vars';
+// Миксины
+@import './base/mixins';
+//Основные стили для страницы
+@import './base/base';
+
+
+
+//Blocks
+@import './blocks/header';
+
+@import './blocks/nav';
+
+@import './blocks/benefits';
+
+@import './blocks/apartments';
+
+@import './blocks/card';
+
+@import './blocks/form';
+
+@import './blocks/carousel';
+
+@import './blocks/footer';
+
+@import './blocks/nav-icon';
+
+@import './blocks/authorization';
+
+@import './blocks/kabinet';
+
+
+

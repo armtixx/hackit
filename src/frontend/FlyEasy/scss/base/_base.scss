@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+
+body {
+    font-family: $font-main;
+    // background-color: $dark;
+    // color: $white;
+    font-size: 16px;
+}
+
+a {
+    color: $dark;
+    transition: color 0.2s ease-in;
+
+    &:hover {
+        color: $white;
+    }
+}
+
+.container {
+    margin: 0 auto;
+    padding: 0 15px;
+    max-width: 1140px;
+
+    &-sm {
+        max-width: 840px;
+    }
+}
+
+.visually-hidden {
+    height: 1px;
+    overflow: hidden;
+    width: 1px;
+
+    position: absolute;
+
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px 1px 1px 1px);
+    clip-path: inset(50%);
+}
+
+.title-2{
+    font-size: 36px;
+    font-family: $font-main;
+    color: $dark;
+    font-weight: 500;
+    margin-bottom: 30px;
+
+    @include mediaTablet {
+        font-size: 28px;
+    }
+}
+
+.link-bold {
+    color: $white;
+    font-weight: 700;
+}
+
+.no-scroll {
+    overflow-y: hidden;
+}
