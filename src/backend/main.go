@@ -1,10 +1,15 @@
 package main
 
 import (
-  "fmt"
-  // "net/http"
+	"fly_easy/routers"
+	_ "fly_easy/routers"
+	_ "fmt"
+
+	"net/http"
+	_ "net/http"
 )
 
 func main() {
-  fmt.Println("Hello Backend")
+	r := routers.GetRouter()
+	http.ListenAndServe(":8080", r)
 }
