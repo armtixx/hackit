@@ -1,79 +1,73 @@
 package database
 
 import (
+	"fmt"
 	"database/sql"
 	"fly_easy/config"
 	"fly_easy/utils"
-	"fmt"
-	"log"
-
+  
 	_ "github.com/go-sql-driver/mysql"
 )
 
+
 type User struct {
-	ID          int
-	Name        string
-	LastName    string
-	SurName     string
-	Email       string
-	PhoneNumber int
-}
+  ID            int
+  Name          string
+  LastName      string
+  SurName       string
+  Email         string
+  PhoneNumber   string
+};
 
 type Ticket struct {
-	ID          int
-	DepartLocID int
-	ArriveLocID int
-	Price       int
-	Airline     string
-	DepTime     string
-	DepDate     string
-	ArriveTime  string
-	ArriveDate  string
+  ID            int
+  DepartLocID   int
+  ArriveLocID   int
+  Price         int
+  Airline       string
+  DepTime       string
+  DepDate       string
+  ArriveTime    string
+  ArriveDate    string
 }
-
-type Tickets []Ticket
 
 type Location struct {
 	ID         int
 	Name       string
-	Popularity float32
+  Popularity float32
 }
 
 type LocationAndPrice struct {
-	Name  string
-	Price int
+	Name       string
+  Price      int
 }
 
+type Tickets   []Ticket
 type LocPrices []LocationAndPrice
-
 type Locations []string
+
 
 type DB struct {
 	url string
 	db  *sql.DB
 }
 
-func (d *DB) Connect() {
-	var err error
+func (d *DB) Connect() (error) {
+	var err error = nil
 	d.db, err = sql.Open("mysql", d.url)
-	if err != nil {
-		log.Fatalf("Не удалось подключиться к базе данных: %v", err)
-	}
-
-	err = d.db.Ping()
-	if err != nil {
-		log.Fatalf("Не удалось проверить подключение к базе данных: %v", err)
-	}
+	if err != nil { return err }
+	if err = d.db.Ping(); err != nil { return err }
+  return err
 }
 
-func (d *DB) Close() {
-	d.db.Close()
+func (d *DB) Close() error {
+	return d.db.Close()
 }
 
-func (d *DB) GetLocationsAndMinPrice() LocPrices {
+func (d *DB) GetLocationsAndMinPrice() (LocPrices, error) {
 	db := d.db
-
-	query := `
+  query :=
+  `
   SELECT l.LocName, MIN(f.price) AS min_price
   FROM Ticket f
   JOIN Location l ON f.ArriveLocID = l.ID
@@ -81,135 +75,100 @@ func (d *DB) GetLocationsAndMinPrice() LocPrices {
   `
 
 	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
+	if err != nil { return LocPrices{}, err }
 
-	var data LocPrices
-
+  var data LocPrices
 	for rows.Next() {
 		var loc LocationAndPrice
 		err := rows.Scan(&loc.Name, &loc.Price)
-		if err != nil {
-			log.Fatalf("Не удалось считать данные: %v", err)
-		}
-		data = append(data, loc)
+		if err != nil { return LocPrices{}, err }
+
+    data = append(data, loc)
 	}
 
 	err = rows.Err()
-	if err != nil {
-		log.Fatalf("Ошибка при чтении строк: %v", err)
-	}
+	if err != nil { return LocPrices{}, err }
 
-	return data
+  return data, nil
 }
 
-func (d *DB) GetPopularLocations() Locations {
+func (d *DB) GetPopularLocations() (Locations, error) {
 	db := d.db
-
-	query := `
+  query := 
+	`
   SELECT LocName FROM Location
   ORDER BY Popularity DESC;
   `
 
 	rows, err := db.Query(query)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
+	if err != nil { return Locations{}, err }
 
-	var data Locations
-
+  var data Locations
 	for rows.Next() {
 		var loc string
 		err := rows.Scan(&loc)
-		if err != nil {
-			log.Fatalf("Не удалось считать данные: %v", err)
-		}
-		data = append(data, loc)
+		if err != nil { return Locations{}, err }
+    data = append(data, loc)
 	}
 
 	err = rows.Err()
-	if err != nil {
-		log.Fatalf("Ошибка при чтении строк: %v", err)
-	}
+	if err != nil { return Locations{}, err }
 
-	return data
+  return data, nil
 }
-
-func (d *DB) GetUserByID(uid int) User {
+//
+func (d *DB) GetUserByID(uid int) (User, error) {
 	db := d.db
-
-	query := `
+  query := 
+	`
   SELECT ID, Name, LastName, SurName, Email, PhoneNumber
   FROM User
   WHERE ID = ?
   `
 
-	rows, err := db.Query(query, uid)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
+	row := db.QueryRow(query, uid)
+  var data User
+  err := row.Scan(
+    &data.ID, &data.Name, 
+    &data.LastName, &data.SurName, 
+    &data.Email, &data.PhoneNumber, 
+    )
+  if err != nil { return User{}, err }
 
-	var data User
+	err = row.Err()
+	if err != nil { return User{}, err }
 
-	for rows.Next() {
-		err := rows.Scan(
-			&data.ID, &data.Name,
-			&data.LastName, &data.SurName,
-			&data.Email, &data.PhoneNumber,
-		)
-		if err != nil {
-			log.Fatalf("Не удалось считать данные: %v", err)
-		}
-	}
-
-	err = rows.Err()
-	if err != nil {
-		log.Fatalf("Ошибка при чтении строк: %v", err)
-	}
-
-	return data
+  return data, nil
 }
 
-func (d *DB) GetUserByEmail(email string) User {
+func (d *DB) GetUserByEmail(email string) (User, error) {
 	db := d.db
-
-	query := `
+  query := 
+	`
   SELECT ID, Name, LastName, SurName, Email, PhoneNumber
   FROM User
   WHERE Email = ?
   `
 
-	rows, err := db.Query(query, email)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
+	row := db.QueryRow(query, email)
+  var data User
+  err := row.Scan(
+    &data.ID, &data.Name, 
+    &data.LastName, &data.SurName, 
+    &data.Email, &data.PhoneNumber, 
+    )
+  if err != nil { return User{}, err }
 
-	var data User
+	err = row.Err()
+	if err != nil { return User{}, err }
 
-	for rows.Next() {
-		err := rows.Scan(
-			&data.ID, &data.Name,
-			&data.LastName, &data.SurName,
-			&data.Email, &data.PhoneNumber,
-		)
-		if err != nil {
-			log.Fatalf("Не удалось считать данные: %v", err)
-		}
-	}
-
-	err = rows.Err()
-	if err != nil {
-		log.Fatalf("Ошибка при чтении строк: %v", err)
-	}
-
-	return data
+  return data, nil
 }
 
-func (d *DB) GetUserTicketsByID(uid int) Tickets {
+func (d *DB) GetUserTicketsByID(uid int) (Tickets, error) {
 	db := d.db
-
-	query := `
+  query := 
+	`
   SELECT ID, DeparteLocID, ArriveLocID, Price, Airline,
   DepTime, DepDate
   FROM Ticket t
@@ -218,38 +177,31 @@ func (d *DB) GetUserTicketsByID(uid int) Tickets {
   `
 
 	rows, err := db.Query(query, uid)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
+	if err != nil { return Tickets{}, err }
 
-	var data Tickets
-
+  var data Tickets
 	for rows.Next() {
-		var ticket Ticket
+    var ticket Ticket
 		err := rows.Scan(
-			&ticket.ID,
-			&ticket.DepartLocID, &ticket.ArriveLocID,
-			&ticket.Price, &ticket.Airline,
-			&ticket.DepTime, &ticket.DepDate,
-		)
-		if err != nil {
-			log.Fatalf("Не удалось считать данные: %v", err)
-		}
-		data = append(data, ticket)
+      &ticket.ID,
+      &ticket.DepartLocID, &ticket.ArriveLocID,
+      &ticket.Price, &ticket.Airline,
+      &ticket.DepTime, &ticket.DepDate,
+      )
+
+		if err != nil { return Tickets{}, err }
+    data = append(data, ticket)
 	}
 
 	err = rows.Err()
-	if err != nil {
-		log.Fatalf("Ошибка при чтении строк: %v", err)
-	}
-
-	return data
-
+	if err != nil { return Tickets{}, err }
+  return data, nil
 }
-func (d *DB) GetUserFavoriteLocations(uid int) Locations {
-	db := d.db
 
-	query := `
+func (d *DB) GetUserFavoriteLocations(uid int) (Locations, error) {
+	db := d.db
+  query := 
+	`
   SELECT l.LocName 
   FROM User u
   JOIN Favorites ul ON u.ID = ul.UserID
@@ -258,33 +210,25 @@ func (d *DB) GetUserFavoriteLocations(uid int) Locations {
   `
 
 	rows, err := db.Query(query, uid)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
+	if err != nil { return Locations{}, err }
 
-	var data Locations
-
+  var data Locations
 	for rows.Next() {
-		var loc string
+    var loc string
 		err := rows.Scan(&loc)
-		if err != nil {
-			log.Fatalf("Не удалось считать данные: %v", err)
-		}
-		data = append(data, loc)
+		if err != nil { return Locations{}, err }
+    data = append(data, loc)
 	}
-
 	err = rows.Err()
-	if err != nil {
-		log.Fatalf("Ошибка при чтении строк: %v", err)
-	}
+	if err != nil { return Locations{}, err }
 
-	return data
+  return data, nil
 }
 
-func (d *DB) GetTicketsByCitesAndDate(derlocid, arrlocid int, date1, date2 string, Isbusinss bool) Tickets {
+func (d *DB) GetTicketsByCitesAndDate(derlocid, arrlocid int, date1, date2 string, Isbusinss bool) (Tickets, error) {
 	db := d.db
-
-	query := `
+  query := 
+	`
 		SELECT ID, Airline, Price, DepDate, DepTime, TimeTaken 
 		FROM Ticket
 		WHERE DepDate >= STR_TO_DATE(?, '%Y-%m-%d')
@@ -296,51 +240,43 @@ func (d *DB) GetTicketsByCitesAndDate(derlocid, arrlocid int, date1, date2 strin
   `
 
 	rows, err := db.Query(
-		query,
-		date1, date2,
-		derlocid, arrlocid,
-		Isbusinss,
-	)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
+    query,
+    date1, date2,
+    derlocid, arrlocid,
+    Isbusinss,
+    )
+	if err != nil { return Tickets{}, err }
 
-	var data Tickets
-
+  var data Tickets
 	for rows.Next() {
-		var ticket Ticket
-		var tmp string
+    var ticket Ticket
+    var tmp string
 		err := rows.Scan(
-			&ticket.ID,
-			&ticket.Airline,
-			&ticket.Price,
-			&ticket.DepDate,
-			&ticket.DepTime,
-			&tmp,
-		)
+      &ticket.ID,
+      &ticket.Airline,
+      &ticket.Price,
+      &ticket.DepDate,
+      &ticket.DepTime,
+      &tmp,
+      )
 
-		arriveDate, _ := utils.GetArriveTime(ticket.DepDate, ticket.DepTime, tmp)
-		ticket.ArriveDate = fmt.Sprintf("%v.%v.%v", arriveDate.Day(), arriveDate.Month(), arriveDate.Year())
-		ticket.ArriveTime = fmt.Sprintf("%v:%v", arriveDate.Hour(), arriveDate.Minute())
+    arriveDate, _ := utils.GetArriveTime(ticket.DepDate, ticket.DepTime, tmp)
+    ticket.ArriveDate = fmt.Sprintf("%v.%v.%v", arriveDate.Day(), arriveDate.Month(), arriveDate.Year())
+    ticket.ArriveTime = fmt.Sprintf("%v:%v", arriveDate.Hour(), arriveDate.Minute())
 
-		if err != nil {
-			log.Fatalf("Не удалось считать данные: %v", err)
-		}
-		data = append(data, ticket)
+		if err != nil { return Tickets{}, err }
+    data = append(data, ticket)
 	}
 
 	err = rows.Err()
-	if err != nil {
-		log.Fatalf("Ошибка при чтении строк: %v", err)
-	}
-
-	return data
+	if err != nil { return Tickets{}, err }
+  return data, nil
 }
 
-func (d *DB) AddUser(user User, passwordHash string) bool {
+func (d *DB) AddUser(user User, passwordHash string) (bool, error) {
 	db := d.db
-
-	query := `
+  query := 
+	`
   INSERT INTO
   User(Name, Email, PasswordHash)
   VALUES
@@ -348,21 +284,15 @@ func (d *DB) AddUser(user User, passwordHash string) bool {
   `
 
 	result, err := db.Exec(query, user.Name, user.Email, passwordHash)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
-
-	if count, _ := result.RowsAffected(); count == 0 {
-		return false
-	}
-
-	return true
+	if err != nil { return false, err }
+  if count, _ := result.RowsAffected(); count == 0 { return false, nil }
+  return true, nil
 }
 
-func (d *DB) AddTicketToFavorite(uid, locid int) bool {
+func (d *DB) AddTicketToFavorite(uid, locid int) (bool, error) {
 	db := d.db
-
-	query := `
+  query := 
+	`
   INSERT INTO
   Favorites(UserID, LocationID)
   VALUES
@@ -370,20 +300,15 @@ func (d *DB) AddTicketToFavorite(uid, locid int) bool {
   `
 
 	result, err := db.Exec(query, uid, locid)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
-
-	if count, _ := result.RowsAffected(); count == 0 {
-		return false
-	}
-	return true
+	if err != nil { return false, err }
+  if count, _ := result.RowsAffected(); count == 0 { return false, nil }
+  return true, nil
 }
 
-func (d *DB) UpdateUserInfo(uid int, user User) bool {
+func (d *DB) UpdateUserInfo(uid int, user User) (bool, error) {
 	db := d.db
-
-	query := `
+  query := 
+	`
   UPDATE User
   SET Name    = ?, LastName    = ?,
   SurName     = ?, Email       = ?,
@@ -392,70 +317,55 @@ func (d *DB) UpdateUserInfo(uid int, user User) bool {
   `
 
 	result, err := db.Exec(
-		query,
-		user.Name, user.LastName, user.SurName,
-		user.Email, user.PhoneNumber,
-		uid,
-	)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
+    query,
+    user.Name, user.LastName, user.SurName,
+    user.Email, user.PhoneNumber,
+    uid,
+    )
 
-	if count, _ := result.RowsAffected(); count == 0 {
-		return false
-	}
-
-	return true
+	if err != nil { return false, err }
+  if count, _ := result.RowsAffected(); count == 0 { return false, nil }
+  return true, nil
 }
 
-func (d *DB) DeleteUser(uid int) bool {
+func (d *DB) DeleteUser(uid int) (bool, error) {
 	db := d.db
-
-	query := `
+  query := 
+	`
   DELETE FROM User
   WHERE ID = ?
   `
 
 	result, err := db.Exec(query, uid)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
-
-	if count, _ := result.RowsAffected(); count == 0 {
-		return false
-	}
-
-	return true
+	if err != nil { return false, err }
+  if count, _ := result.RowsAffected(); count == 0 { return false, nil }
+  return true, nil
 
 }
 
-func (d *DB) DeleteTicketFromFavorite(uid, locid int) bool {
+func (d *DB) DeleteTicketFromFavorite(uid, locid int) (bool, error) {
 	db := d.db
-
-	query := `
+  query := 
+	`
   DELETE FROM Favorites
   WHERE UserID = ? AND LocationID = ?
   `
 
 	result, err := db.Exec(query, uid, locid)
-	if err != nil {
-		log.Fatalf("Не удалось выполнить запрос: %v", err)
-	}
-
-	if count, _ := result.RowsAffected(); count == 0 {
-		return false
-	}
-
-	return true
+	if err != nil { return false, err }
+  if count, _ := result.RowsAffected(); count == 0 { return false, nil }
+  return true, nil
 }
 
 var _db *DB
 
 func GetDB() *DB {
-	if _db == nil {
-		var db = DB{url: config.DBUrl}
-		db.Connect()
-		_db = &db
-	}
-	return _db
+  if _db == nil {
+    var db = DB{url: config.DBUrl}
+    err := db.Connect()
+    if err != nil { panic("[Error]: Cannot connect to database") }
+
+    _db = &db
+  }
+  return _db
 }
