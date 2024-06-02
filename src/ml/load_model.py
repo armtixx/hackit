@@ -20,4 +20,4 @@ def make_prediction(date, airline, from_id, to_id, flight_class):
     predicted_price = model_keras.predict(input_data_scaled)
     
     # Возвращение предсказания
-    return (int(predicted_price[0][0])/2)
+    return int(predicted_price[0][0])
