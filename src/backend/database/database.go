@@ -159,7 +159,7 @@ func (d *DB) GetLocation() {
 	}
 }
 
-func Tmp() {
+func DataBaseInit() {
 	db := DB{Url: config.DBUrl}
 	db.Connect()
 	db.GetTicket()
