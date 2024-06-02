@@ -1,6 +1,6 @@
 main() {
-  source "$HOME/env"
-  go run main.go
+	source "$HOME/.rc/.env"
+	go run main.go
 }
 
 main
