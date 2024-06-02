@@ -16,7 +16,7 @@ type User struct {
 	LastName    string
 	SurName     string
 	Email       string
-	PhoneNumber int
+	PhoneNumber string
 }
 
 type Ticket struct {

@@ -51,12 +51,33 @@ func GetArriveTime(d, t string, timet string) (time.Time, error) {
 	return time.Unix(unixTime, 0).UTC(), nil
 }
 
-func CheckEmail(email string) {
+func CheckEmail(email string) bool {
 	emRgx := `[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
 	match, _ := regexp.MatchString(emRgx, email)
 	if match {
-
+		return true
 	} else {
+		return false
+	}
+}
 
+func CheckDate(email string) bool {
+	dateRegex := `^(\d{4})[:-](\d{2})[:-](\d{2})$`
+	dateStr := "2022-05-23"
+	if match, _ := regexp.MatchString(dateRegex, dateStr); match {
+		fmt.Println("Дата в формате 'yyyy-mm-dd' валидна:", dateStr)
+	} else {
+		fmt.Println("Дата в формате 'yyyy-mm-dd' невалидна:", dateStr)
+	}
+
+	// Проверка времени в формате "12h 30m"
+	timeRegex := `^(\d{1,2})h\s(\d{1,2})m$`
+	timeStr := "12h 30m"
+	if match, _ := regexp.MatchString(timeRegex, timeStr); match {
+		fmt.Println("Время в формате '12h 30m' валидно:", timeStr)
+		return true
+	} else {
+		fmt.Println("Время в формате '12h 30m' невалидно:", timeStr)
+		return false
 	}
 }
