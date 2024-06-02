@@ -19,21 +19,7 @@ func GenerateUserToken(email, passwordHash, salt string) string {
   return hex.EncodeToString(hash)
 }
 
-func GetArriveTime(d, t string, h, m int) (time.Time, error) {
-  layout := "2006-01-02 15:04:05" // Date and time layout
-  dateTimeStr := fmt.Sprintf("%s %s", d, t)
-
-  dateTime, err := time.Parse(layout, dateTimeStr)
-  if err != nil {
-    return time.Time{}, &time.ParseError{}
-  }
-
-  unixTime := dateTime.Unix()
-  unixTime += int64((h * 60 + m) * 60)
-  return time.Unix(unixTime, 0).UTC(), nil
-}
-
-func parseTime(s string) int {
+func ParseTime(s string) int {
   tmp := strings.Replace(strings.Replace(s, "h", "", 1), "m", "", 1)
   hm := strings.Split(tmp, " ")
 
@@ -47,6 +33,19 @@ func parseTime(s string) int {
     m = 0
   }
 
-  return  h * 60 + m
+  return h * 60 + m
 }
 
+func GetArriveTime(d, t string, timet string) (time.Time, error) {
+  layout := "2006-01-02 15:04:05"
+  dateTimeStr := fmt.Sprintf("%s %s", d, t)
+
+  dateTime, err := time.Parse(layout, dateTimeStr)
+  if err != nil {
+    return time.Time{}, &time.ParseError{}
+  }
+
+  unixTime := dateTime.Unix()
+  unixTime += int64(ParseTime(timet) * 60)
+  return time.Unix(unixTime, 0).UTC(), nil
+}
