@@ -1,5 +1,5 @@
 main() {
-  source "./config/.env"
+  source "$HOME/env"
   go run main.go
 }
 
