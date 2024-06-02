@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fly_easy/database"
 	"fly_easy/utils"
+	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -13,13 +14,19 @@ var db *database.DB = database.GetDB()
 
 func GetLocationsList(w http.ResponseWriter, r *http.Request) {
 
-	locationList := db.GetLocationsAndMinPrice()
+	locationList, err := db.GetLocationsAndMinPrice()
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(locationList)
 }
 
 func GetPopularLocations(w http.ResponseWriter, r *http.Request) {
-	popLocList := db.GetPopularLocations()
+	popLocList, err := db.GetPopularLocations()
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(popLocList)
 }
@@ -31,7 +38,10 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	userInfo := db.GetUserByID(id)
+	userInfo, err := db.GetUserByID(id)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(userInfo)
 }
@@ -43,7 +53,10 @@ func GetUsersTickets(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	userTickets := db.GetUserTicketsByID(id)
+	userTickets, err := db.GetUserTicketsByID(id)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(userTickets)
 }
@@ -55,7 +68,10 @@ func GetUsersFavorites(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	userFavorites := db.GetUserFavoriteLocations(id)
+	userFavorites, err := db.GetUserFavoriteLocations(id)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(userFavorites)
 }
@@ -67,7 +83,10 @@ func GetUserByEmail(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userByEmail := db.GetUserByEmail(email)
+	userByEmail, err := db.GetUserByEmail(email)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(userByEmail)
 }
@@ -86,10 +105,16 @@ func GetSearchTickets(w http.ResponseWriter, r *http.Request) {
 
 	if isBusStr == "True" || isBusStr == "true" || isBusStr == "1" {
 		isBusiness = true
-	} else {
+	} else if isBusStr == "False" || isBusStr == "false" || isBusStr == "0" {
 		isBusiness = false
+	} else {
+		return
 	}
-	serchedTockets := db.GetTicketsByCitesAndDate(depLocID, arrLocID, depDate, arrDate, isBusiness)
+	fmt.Println(depLocID, arrLocID, depDate, arrDate, isBusiness)
+	serchedTockets, err := db.GetTicketsByCitesAndDate(depLocID, arrLocID, depDate, arrDate, isBusiness)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+	}
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(serchedTockets)
 }
