@@ -1,43 +1,47 @@
 package handlers
 
 import (
-	"database/sql"
+	_ "database/sql"
 	"encoding/json"
 	"fly_easy/database"
-	_ "fly_easy/database"
-	"fmt"
 	"net/http"
 )
 
-// var db database.IDataBase = database.DB{}
+var db *database.DB = database.GetDB()
 
 func GetLocationsList(w http.ResponseWriter, r *http.Request) {
-	database.Tmp()
 
-	fmt.Fprintln(w, "loclist")
-
+	LocationList := db.GetLocationsAndMinPrice()
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(LocationList)
 }
 func GetPopularLocations(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprintln(w, "poploc")
+	PopLocList := db.GetPopularLocations()
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(PopLocList)
 }
 func GetUserInfo(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprintln(w, "userinfo")
+	LocationList := db.GetLocationsAndMinPrice()
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(LocationList)
 }
 func GetUsersTickets(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprintln(w, "usertickets")
+	LocationList := db.GetLocationsAndMinPrice()
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(LocationList)
 }
 func GetUsersFavorites(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprintln(w, "favorites")
+	LocationList := db.GetLocationsAndMinPrice()
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(LocationList)
 }
 func GetUserByEmail(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprintln(w, "usbyemail")
+	LocationList := db.GetLocationsAndMinPrice()
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(LocationList)
 }
 func GetSearchTickets(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprintln(w, "searchtickets")
+	LocationList := db.GetLocationsAndMinPrice()
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(LocationList)
 }

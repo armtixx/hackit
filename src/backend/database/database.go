@@ -4,7 +4,9 @@ import (
 	"database/sql"
 	"fly_easy/config"
 	"fly_easy/utils"
-  
+	"fmt"
+	"log"
+
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -91,7 +93,7 @@ func (d *DB) GetLocationsAndMinPrice() LocPrices {
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-    data = append(data, loc)
+		data = append(data, loc)
 	}
 
 	err = rows.Err()
@@ -123,7 +125,7 @@ func (d *DB) GetPopularLocations() Locations {
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-    data = append(data, loc)
+		data = append(data, loc)
 	}
 
 	err = rows.Err()
@@ -233,7 +235,7 @@ func (d *DB) GetUserTicketsByID(uid int) Tickets {
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-    data = append(data, ticket)
+		data = append(data, ticket)
 	}
 
 	err = rows.Err()
@@ -268,7 +270,7 @@ func (d *DB) GetUserFavoriteLocations(uid int) Locations {
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-    data = append(data, loc)
+		data = append(data, loc)
 	}
 
 	err = rows.Err()
@@ -282,7 +284,7 @@ func (d *DB) GetUserFavoriteLocations(uid int) Locations {
 func (d *DB) GetTicketsByCitesAndDate(derlocid, arrlocid int, date1, date2 string, Isbusinss bool) Tickets {
 	db := d.db
 
-  query := `
+	query := `
 		SELECT ID, Airline, Price, DepDate, DepTime, TimeTaken 
 		FROM Ticket
 		WHERE DepDate >= STR_TO_DATE(?, '%Y-%m-%d')
@@ -294,37 +296,37 @@ func (d *DB) GetTicketsByCitesAndDate(derlocid, arrlocid int, date1, date2 strin
   `
 
 	rows, err := db.Query(
-    query,
-    date1, date2,
-    derlocid, arrlocid,
-    Isbusinss,
-    )
+		query,
+		date1, date2,
+		derlocid, arrlocid,
+		Isbusinss,
+	)
 	if err != nil {
 		log.Fatalf("Не удалось выполнить запрос: %v", err)
 	}
 
-  var data Tickets
+	var data Tickets
 
 	for rows.Next() {
-    var ticket Ticket
-    var tmp string
+		var ticket Ticket
+		var tmp string
 		err := rows.Scan(
-      &ticket.ID,
-      &ticket.Airline,
-      &ticket.Price,
-      &ticket.DepDate,
-      &ticket.DepTime,
-      &tmp,
-      )
+			&ticket.ID,
+			&ticket.Airline,
+			&ticket.Price,
+			&ticket.DepDate,
+			&ticket.DepTime,
+			&tmp,
+		)
 
-    arriveDate, _ := utils.GetArriveTime(ticket.DepDate, ticket.DepTime, tmp)
-    ticket.ArriveDate = fmt.Sprintf("%v.%v.%v", arriveDate.Day(), arriveDate.Month(), arriveDate.Year())
-    ticket.ArriveTime = fmt.Sprintf("%v:%v", arriveDate.Hour(), arriveDate.Minute())
+		arriveDate, _ := utils.GetArriveTime(ticket.DepDate, ticket.DepTime, tmp)
+		ticket.ArriveDate = fmt.Sprintf("%v.%v.%v", arriveDate.Day(), arriveDate.Month(), arriveDate.Year())
+		ticket.ArriveTime = fmt.Sprintf("%v:%v", arriveDate.Hour(), arriveDate.Minute())
 
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-    data = append(data, ticket)
+		data = append(data, ticket)
 	}
 
 	err = rows.Err()
@@ -332,7 +334,7 @@ func (d *DB) GetTicketsByCitesAndDate(derlocid, arrlocid int, date1, date2 strin
 		log.Fatalf("Ошибка при чтении строк: %v", err)
 	}
 
-  return data
+	return data
 }
 
 func (d *DB) AddUser(user User, passwordHash string) bool {
@@ -372,21 +374,16 @@ func (d *DB) AddTicketToFavorite(uid, locid int) bool {
 		log.Fatalf("Не удалось выполнить запрос: %v", err)
 	}
 
-<<<<<<< HEAD
 	if count, _ := result.RowsAffected(); count == 0 {
 		return false
 	}
-=======
-  if count, _ := result.RowsAffected(); count == 0 {
-    return false
-  }
-  return true
+	return true
 }
 
 func (d *DB) UpdateUserInfo(uid int, user User) bool {
 	db := d.db
 
-  query := `
+	query := `
   UPDATE User
   SET Name    = ?, LastName    = ?,
   SurName     = ?, Email       = ?,
@@ -395,18 +392,18 @@ func (d *DB) UpdateUserInfo(uid int, user User) bool {
   `
 
 	result, err := db.Exec(
-    query,
-    user.Name, user.LastName, user.SurName,
-    user.Email, user.PhoneNumber,
-    uid,
-    )
+		query,
+		user.Name, user.LastName, user.SurName,
+		user.Email, user.PhoneNumber,
+		uid,
+	)
 	if err != nil {
 		log.Fatalf("Не удалось выполнить запрос: %v", err)
 	}
 
-  if count, _ := result.RowsAffected(); count == 0 {
-    return false
-  }
+	if count, _ := result.RowsAffected(); count == 0 {
+		return false
+	}
 
 	return true
 }
@@ -451,13 +448,14 @@ func (d *DB) DeleteTicketFromFavorite(uid, locid int) bool {
 
 	return true
 }
+
 var _db *DB
 
 func GetDB() *DB {
-  if _db == nil {
-    var db = DB{url: config.DBUrl}
-    db.Connect()
-    _db = &db
-  }
-  return _db
+	if _db == nil {
+		var db = DB{url: config.DBUrl}
+		db.Connect()
+		_db = &db
+	}
+	return _db
 }

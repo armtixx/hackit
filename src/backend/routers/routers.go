@@ -31,6 +31,7 @@ func GetRouter() *mux.Router {
 	api.HandleFunc("/GetLocation", Middleware(handlers.Handler))
 
 	apiGet.HandleFunc("/LocationsList", Middleware(handlers.GetLocationsList))
+	apiGet.HandleFunc("/PopularLocations", Middleware(handlers.GetPopularLocations))
 	apiGet.HandleFunc("/UserInfo", Middleware(handlers.GetUserInfo))
 	apiGet.HandleFunc("/UserTickets", Middleware(handlers.GetUsersTickets))
 	apiGet.HandleFunc("/UsersFavorites", Middleware(handlers.GetUsersFavorites))
