@@ -261,8 +261,8 @@ func (d *DB) GetTicketsByCitesAndDate(derlocid, arrlocid int, date1, date2 strin
       )
 
     arriveDate, _ := utils.GetArriveTime(ticket.DepDate, ticket.DepTime, tmp)
-    ticket.ArriveDate = fmt.Sprintf("%v.%v.%v", arriveDate.Year(), int(arriveDate.Month()), arriveDate.Day())
-    ticket.ArriveTime = fmt.Sprintf("%v:%v", arriveDate.Hour(), arriveDate.Minute())
+    ticket.ArriveDate = fmt.Sprintf("%v-%v-%v", arriveDate.Year(), int(arriveDate.Month()), arriveDate.Day())
+    ticket.ArriveTime = fmt.Sprintf("%v:%v:00", arriveDate.Hour(), arriveDate.Minute())
 
 		if err != nil { return Tickets{}, err }
     data = append(data, ticket)
