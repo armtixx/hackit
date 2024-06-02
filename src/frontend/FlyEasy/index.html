@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlyEasy</title>
+    <link rel="icon" type="image/png" href="./img/plane.png">
+    <link rel="stylesheet" href="./css/main.css">
+
+</head>
+<body>
+    <header class="header">
+        <div class="header_top">
+            <div class="container">
+                <div class="logo">
+                    <img src="./img/logo.png" alt="Логотип">
+                </div>
+                <div class="logo none">
+                    <img src="./img/header/plane.png" alt="Логотип">
+                </div>
+                <nav>
+                    <div class="burger-menu" id="burger-menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <ul class="nav-list" id="nav-list">
+                        <li><a href="#about">О компании</a></li>
+                        <li><a href="#travel">Путешествия</a></li>
+                        <li><a href="#destinations">Куда поехать</a></li>
+                        <li><a href="#contacts">Контакты</a></li>
+                        <div class="auth">
+                            <a href="./auto.html">Вход / Регистрация</a>
+                        </div>
+                    </ul>
+                </nav>
+                <!-- <div class="auth">
+                    <a href="#login">Вход</a> <a href="#register">Регистрация</a>
+                </div> -->
+            </div>
+            <div class="container">
+                <h1 class="header_title">Бронируйте билеты, <br> воплощайте мечты!</h1>
+            </div>
+        </div>
+        <main class="main_input">
+            <!-- <div class="container_input">
+                <form class="search-form">
+                    <input type="text" placeholder="Куда" class="search-input">
+                    <input type="text" placeholder="Откуда" class="search-input">
+                    <input type="text" class="data-input" placeholder="Туда">
+                    <input type="text" class="data-input"  placeholder="Обратно">
+                    <select class="search-select" class="search-input">
+                        <option value="" disabled selected>Эконом</option>
+                        <option value="economy">Эконом</option>
+                        <option value="business">Комфорт</option>
+                        <option value="business">Бизнес</option>
+                        <option value="first">Первый класс</option>
+                    </select>
+                    <button type="submit">Найти билеты</button>
+                </form>
+            </div> -->
+            <div class="container_input">
+                <div class="checkbox-container">
+                    <button id="aviabilety" class="checkbox active">Авиабилеты</button>
+                    <button id="oteli" class="checkbox">Отели</button>
+                    <button id="prochee" class="checkbox">Прочее</button>
+                </div>
+                <div class="form-container">
+                    <input type="text" placeholder="Куда">
+                    <input type="text" placeholder="Откуда">
+                    <input type="text" id="departure" placeholder="Туда">
+                    <input type="text" id="return" placeholder="Обратно">
+                    <select>
+                        <option value="econom">Эконом</option>
+                        <option value="business">Комфорт</option>
+                        <option value="business">Бизнес</option>
+                        <option value="first">Первый класс</option>
+                    </select>
+                    <button>Найти билеты</button>
+                </div>
+            </div>
+        </main> 
+    </header>
+    
+
+    <main>
+        <section class="project-benefits" id="about">
+            <h1>О проекте и его преимуществах</h1>
+            <p>Проект создан помочь пользователям быстро и удобно находить авиабилеты по различным направлениям, сравнивать цены и условия перелётов, а также выбирать оптимальные варианты для своих путешествий</p>
+            <div class="benefits">
+                <div class="benefit">
+                    <img src="./img/benefits/airplane.png" alt="airplane">
+                    <h2>Широкий выбор рейсов</h2>
+                    <p>В проекте представлены только лучшие и проверенные временем рейсы с высокими оценками</p>
+                </div>
+                <div class="benefit">
+                    <img src="./img/benefits/money.png" alt="money">
+                    <h2>Низкие цены и скидки</h2>
+                    <p>На сайте можно найти самые оптимальные и низкие цены среди доступных и подобрать тур под любой кошелёк</p>
+                </div>
+                <div class="benefit">
+                    <img src="./img/benefits/time.png" alt="time">
+                    <h2>Экономия времени</h2>
+                    <p>Удобный и современный интерфейс поможет с лёгкостью подобрать необходимый тур для каждого</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="travel-comfort" id="travel">
+            <h1>Путешествуй с комфортом</h1>
+            <div class="destinations">
+                <div class="destination">
+                    <img src="./img/cards/Bangalore.png" alt="Бангалор">
+                    <div class="destination-header">
+                        <h2>Бангалор</h2>
+                        <span class="favorite-icon">&#9829;</span>
+                    </div>
+                    <p>
+                        Бангалор известен своим благоприятным климатом, а также достопримечательностями, такими как храм Быка и храм Додда Ганеша — это индуистские храмы, построенные в дравидийском стиле
+                    </p>
+                    <p class="price">от 1135 p</p>
+                    <!-- <a href="#" class="learn-more">Подробнее →</a> -->
+                </div>
+                <div class="destination">
+                    <img src="./img/cards/Delhi.png" alt="Дели">
+                    <div class="destination-header">
+                        <h2>Дели</h2>
+                        <span class="favorite-icon">&#9829;</span>
+                    </div>
+                    <p>
+                        Этот город привлекает туристов своим богатым историческим наследием и уникальным сочетанием разных культур. Дели расположен на равнинах возле брода через реку Ямуна (Джамна) и считается важным центром Азии
+                    </p>
+                    <p class="price">от 2596 p</p>
+                </div>
+                <div class="destination">
+                    <img src="./img/cards/Calcutta.png" alt="Калькутта">
+                    <div class="destination-header">
+                        <h2>Калькутта</h2>
+                        <span class="favorite-icon">&#9829;</span>
+                    </div>
+                    <p>Калькутта — это удивительный город, расположенный на берегах реки Ганг. Он славится своей историей, культурой и архитектурой, а также является крупным экономическим и финансовым центром Индии</p>
+                    <p class="price">от 1135 p</p>
+                </div>
+
+                <!-- Скрытые блоки -->
+                <div class="destination hidden">
+                    <img src="./img/cards/Mumbai.png" alt="Бангалор">
+                    <div class="destination-header">
+                        <h2>Мумбаи</h2>
+                        <span class="favorite-icon">&#9829;</span>
+                    </div>
+                    <p>
+                        Мумбаи — это крупный город в Индии, который поражает своей архитектурой, культурой и историей. Город известен своими красивыми пляжами, колониальными зданиями и богатой историей киноиндустрии
+                    </p>
+                    <p class="price">от 1135 p</p>
+                </div>
+                <div class="destination hidden">
+                    <img src="./img/cards/Hyderabad.png" alt="Бангалор">
+                    <div class="destination-header">
+                        <h2>Бангалор</h2>
+                        <span class="favorite-icon">&#9829;</span>
+                    </div>
+                    <p>
+                        Хайдарабад — это красивый город, расположенный на реке Муси. В Хайдарабаде много достопримечательностей, включая киноиндустрию, архитектуру, парки и музеи.
+                    </p>
+                    <p class="price">от 1135 p</p>
+                </div>
+                <div class="destination hidden">
+                    <img src="./img/cards/Chennai.png" alt="Бангалор">
+                    <div class="destination-header">
+                        <h2>Бангалор</h2>
+                        <span class="favorite-icon">&#9829;</span>
+                    </div>
+                    <p>
+                        В городе находится португальская базилика Св. Фомы XVI века и храм Капалишвар, представляющий собой фантастический пример дравидийской (тамильской) архитектуры с потрясающими скульптурами
+                    </p>
+                    <p class="price">от 1135 p</p>
+                </div>
+            </div>
+            <button class="more-places">Показать ещё</button>
+        </section>
+    </main>
+
+    <script>
+        document.querySelector('.more-places').addEventListener('click', function() {
+            const hiddenDestinations = document.querySelectorAll('.destination.hidden');
+            hiddenDestinations.forEach(destination => {
+                destination.classList.remove('hidden');
+            });
+
+            if (hiddenDestinations.length === 0) {
+                this.style.display = 'none'; // Скрыть кнопку после отображения всех скрытых элементов
+            }
+            this.style.display = 'none'; // Скрыть кнопку после нажатия на неё
+        });
+    </script>
+
+    <div class="carousel-container" id="destinations">
+        <div class="carousel-container"> 
+            <div class="header_carousel"> 
+                <h2>Топ места для тебя</h2> 
+                <div class="scroll-buttons">
+                    <button id="scroll-left" class="scroll-button"><img src="./img/cards/property.png"></button>
+                    <button id="scroll-right" class="scroll-button"><img src="./img/cards/property2.png"></button> 
+                </div>
+            </div> 
+            <div class="carousel" id="carousel"> 
+                <div class="carousel-item"> 
+                    <img src="./img/cards/Kazan.png" alt="Казань"> 
+                    <p>Казань</p> 
+                </div> 
+                <div class="carousel-item"> 
+                    <img src="./img/cards/Volgograd.png" alt="Волгоград"> 
+                    <p>Волгоград</p> 
+                </div> 
+                <div class="carousel-item"> 
+                    <img src="./img/cards/Saint_Petersburg.png" alt="Санкт-Петербург"> 
+                    <p>Санкт-Петербург</p> 
+                </div> 
+                <div class="carousel-item"> 
+                    <img src="./img/cards/Kaliningrad.png" alt="Калининград"> 
+                    <p>Калининград</p> 
+                </div> 
+                <div class="carousel-item"> 
+                    <img src="./img/cards/Sevastopol.png" alt="Севастополь"> 
+                    <p>Севастополь</p> 
+                </div> 
+                <div class="carousel-item"> 
+                    <img src="./img/cards/Lipetsk.png" alt="Липецк"> 
+                    <p>Липецк</p> 
+                </div> 
+                <div class="carousel-item"> 
+                    <img src="./img/cards/Moscow.png" alt="Москва"> 
+                    <p>Москва</p> 
+                </div> 
+                <div class="carousel-item"> 
+                    <img src="./img/cards/Vladimir.png" alt="Владимир"> 
+                    <p>Владимир</p> 
+                </div> 
+            </div> 
+            <button class="find-tickets">Показать всё</button> 
+        </div>
+    </div>
+    <footer class="footer" id="contacts">
+        <div class="footer-content">
+            <h2>Не пропусти выгодные предложения</h2>
+            <p>
+                Чтобы не пропускать выгодные предложения и скидки, ты можешь зарегистрироваться на нашем сайте и получать уведомления о приятных скидках каждого месяца и не только. После регистрации всем пользователям доступны дополнительные функции и бонусы.
+            </p>
+            <button class="register-button">Зарегистрироваться</button>
+        </div>
+        <div class="footer-bottom">
+            <span>© FlyEasy, 2024</span>
+            <a href="#">Политика конфиденциальности</a>
+        </div>
+    </footer>
+ 
+
+    <script  src="./js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</body>
+</html>
