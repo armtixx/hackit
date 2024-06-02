@@ -3,9 +3,8 @@ package database
 import (
 	"database/sql"
 	"fly_easy/config"
-	"fmt"
-	"log"
-
+	"fly_easy/utils"
+  
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -47,37 +46,14 @@ type LocPrices []LocationAndPrice
 
 type Locations []string
 
-type IDataBase interface {
-	Connect()
-	Close()
-
-	GetLocationsAndMinPrice() LocPrices
-	GetPopularLocations() Locations
-
-	GetUserByID(uid int) User
-	GetUserByEmail(email string) User
-	GetUserTicketsByID(uid int) Tickets
-	GetUserFavoriteLocations(uid int) Locations
-
-	GetTicketsByCitesAndDate() Tickets
-
-	AddUser(user User, password string) bool
-	AddTicketToFavorite(uid int) bool
-	UpdateUserInfo(user User) bool
-	UpdateUserPassword(uid int, password string) bool
-
-	DeleteUser(id int) bool
-	DeleteTicketFromFavorite() bool
-}
-
 type DB struct {
-	Url string
+	url string
 	db  *sql.DB
 }
 
 func (d *DB) Connect() {
 	var err error
-	d.db, err = sql.Open("mysql", d.Url)
+	d.db, err = sql.Open("mysql", d.url)
 	if err != nil {
 		log.Fatalf("Не удалось подключиться к базе данных: %v", err)
 	}
@@ -115,10 +91,7 @@ func (d *DB) GetLocationsAndMinPrice() LocPrices {
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-		data = append(data, loc)
-		// fmt.Printf("{%v, %v}\n",
-		//     &loc.Name, &loc.Price,
-		//   )
+    data = append(data, loc)
 	}
 
 	err = rows.Err()
@@ -150,10 +123,7 @@ func (d *DB) GetPopularLocations() Locations {
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-		data = append(data, loc)
-		// fmt.Printf("{%v, %v}\n",
-		//     &loc.Name, &loc.Price,
-		//   )
+    data = append(data, loc)
 	}
 
 	err = rows.Err()
@@ -189,9 +159,6 @@ func (d *DB) GetUserByID(uid int) User {
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-		// fmt.Printf("{%v, %v}\n",
-		//     &loc.Name, &loc.Price,
-		//   )
 	}
 
 	err = rows.Err()
@@ -227,9 +194,6 @@ func (d *DB) GetUserByEmail(email string) User {
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-		// fmt.Printf("{%v, %v}\n",
-		//     &loc.Name, &loc.Price,
-		//   )
 	}
 
 	err = rows.Err()
@@ -246,8 +210,9 @@ func (d *DB) GetUserTicketsByID(uid int) Tickets {
 	query := `
   SELECT ID, DeparteLocID, ArriveLocID, Price, Airline,
   DepTime, DepDate
-  FROM Ticket
-  WHERE UserID = ?
+  FROM Ticket t
+  JOIN UserTickets ut ON t.ID = ut.TicketID
+  WHERE ut.UserID = ?;
   `
 
 	rows, err := db.Query(query, uid)
@@ -268,10 +233,7 @@ func (d *DB) GetUserTicketsByID(uid int) Tickets {
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-		data = append(data, ticket)
-		// fmt.Printf("{%v, %v}\n",
-		//     &loc.Name, &loc.Price,
-		//   )
+    data = append(data, ticket)
 	}
 
 	err = rows.Err()
@@ -306,10 +268,7 @@ func (d *DB) GetUserFavoriteLocations(uid int) Locations {
 		if err != nil {
 			log.Fatalf("Не удалось считать данные: %v", err)
 		}
-		data = append(data, loc)
-		// fmt.Printf("{%v, %v}\n",
-		//     &loc.Name, &loc.Price,
-		//   )
+    data = append(data, loc)
 	}
 
 	err = rows.Err()
@@ -320,7 +279,61 @@ func (d *DB) GetUserFavoriteLocations(uid int) Locations {
 	return data
 }
 
-// func (d *DB) GetTicketsByCitesAndDate() Tickets {}
+func (d *DB) GetTicketsByCitesAndDate(derlocid, arrlocid int, date1, date2 string, Isbusinss bool) Tickets {
+	db := d.db
+
+  query := `
+		SELECT ID, Airline, Price, DepDate, DepTime, TimeTaken 
+		FROM Ticket
+		WHERE DepDate >= STR_TO_DATE(?, '%Y-%m-%d')
+		AND DepDate <= STR_TO_DATE(?, '%Y-%m-%d')
+		AND DeparteLocID = ?
+		AND ArriveLocID = ?
+		AND IsBusiness = ? 
+		ORDER BY Price ASC
+  `
+
+	rows, err := db.Query(
+    query,
+    date1, date2,
+    derlocid, arrlocid,
+    Isbusinss,
+    )
+	if err != nil {
+		log.Fatalf("Не удалось выполнить запрос: %v", err)
+	}
+
+  var data Tickets
+
+	for rows.Next() {
+    var ticket Ticket
+    var tmp string
+		err := rows.Scan(
+      &ticket.ID,
+      &ticket.Airline,
+      &ticket.Price,
+      &ticket.DepDate,
+      &ticket.DepTime,
+      &tmp,
+      )
+
+    arriveDate, _ := utils.GetArriveTime(ticket.DepDate, ticket.DepTime, tmp)
+    ticket.ArriveDate = fmt.Sprintf("%v.%v.%v", arriveDate.Day(), arriveDate.Month(), arriveDate.Year())
+    ticket.ArriveTime = fmt.Sprintf("%v:%v", arriveDate.Hour(), arriveDate.Minute())
+
+		if err != nil {
+			log.Fatalf("Не удалось считать данные: %v", err)
+		}
+    data = append(data, ticket)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		log.Fatalf("Ошибка при чтении строк: %v", err)
+	}
+
+  return data
+}
 
 func (d *DB) AddUser(user User, passwordHash string) bool {
 	db := d.db
@@ -359,15 +372,45 @@ func (d *DB) AddTicketToFavorite(uid, locid int) bool {
 		log.Fatalf("Не удалось выполнить запрос: %v", err)
 	}
 
+<<<<<<< HEAD
 	if count, _ := result.RowsAffected(); count == 0 {
 		return false
 	}
+=======
+  if count, _ := result.RowsAffected(); count == 0 {
+    return false
+  }
+  return true
+}
+
+func (d *DB) UpdateUserInfo(uid int, user User) bool {
+	db := d.db
+
+  query := `
+  UPDATE User
+  SET Name    = ?, LastName    = ?,
+  SurName     = ?, Email       = ?,
+  PhoneNumber = ?
+  WHERE ID    = ?
+  `
+
+	result, err := db.Exec(
+    query,
+    user.Name, user.LastName, user.SurName,
+    user.Email, user.PhoneNumber,
+    uid,
+    )
+	if err != nil {
+		log.Fatalf("Не удалось выполнить запрос: %v", err)
+	}
+
+  if count, _ := result.RowsAffected(); count == 0 {
+    return false
+  }
 
 	return true
 }
 
-// func (d *DB) UpdateUserInfo(user User) bool {}
-// func (d *DB) UpdateUserPassword(uid int, password string) bool {}
 func (d *DB) DeleteUser(uid int) bool {
 	db := d.db
 
@@ -408,35 +451,13 @@ func (d *DB) DeleteTicketFromFavorite(uid, locid int) bool {
 
 	return true
 }
+var _db *DB
 
-func Tmp() {
-	db := DB{Url: config.DBUrl}
-	db.Connect()
-
-	// Get
-
-	fmt.Println(db.GetLocationsAndMinPrice())
-
-	fmt.Println(db.GetPopularLocations())
-	fmt.Println(db.GetUserByID(4))
-	fmt.Println(db.GetUserByEmail("emily.davis@example.com"))
-	fmt.Println(db.GetUserTicketsByID(2))
-	fmt.Println(db.GetUserFavoriteLocations(5))
-
-	// Add
-	// u := User{
-	//   Name: "Bob",
-	//   Email: "Bobasd@gmail.com",
-	// }
-	// fmt.Println(db.AddUser(u, "asdasdasdaklasd"))
-	// fmt.Println(db.AddTicketToFavorite(11, 3))
-	// fmt.Println(db.AddTicketToFavorite(11, 2))
-	// fmt.Println(db.GetUserFavoriteLocations(11))
-	// fmt.Println(db.DeleteTicketFromFavorite(11, 3))
-	// fmt.Println(db.GetUserFavoriteLocations(11))
-	fmt.Println(db.GetUserByID(11))
-	fmt.Println(db.DeleteUser(11))
-	fmt.Println(db.GetUserByID(11))
-
-	db.Close()
+func GetDB() *DB {
+  if _db == nil {
+    var db = DB{url: config.DBUrl}
+    db.Connect()
+    _db = &db
+  }
+  return _db
 }
