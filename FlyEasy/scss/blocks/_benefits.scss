@@ -1,0 +1,57 @@
+
+.project-benefits {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.project-benefits h1 {
+    font-size: 32px;
+    font-weight: 500;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.project-benefits p {
+    font-size: 15px;
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.benefits {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+
+    @include mediaTablet {
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    }
+}
+
+
+
+.benefit {
+    background: #F5F5F5;
+    border: 1px solid #F5F5F5;
+    border-radius: 10px;
+    padding: 20px;
+    flex: 1;
+    text-align: center;
+}
+
+.benefit img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.benefit h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.benefit p {
+    font-size: 14px;
+}

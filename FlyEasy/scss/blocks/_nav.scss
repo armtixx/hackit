@@ -1,0 +1,16 @@
+.nav {
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+}
+
+.nav_list {
+    display: flex;
+    align-items: center;
+    // justify-content: center;
+    // text-align: center;
+    color: $dark;
+    column-gap: 40px;
+}
+
+

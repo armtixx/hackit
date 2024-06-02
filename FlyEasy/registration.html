@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlyEasy</title>
+    <link rel="icon" type="image/png" href="./img/plane.png">
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <header>
+        <div class="header_top">
+            <div class="container">
+                <div class="logo">
+                    <img src="./img/header/logo_auto.png" alt="Логотип">
+                </div>
+                <div class="logo none">
+                    <img src="./img/header/plane.png" alt="Логотип">
+                </div>
+                <nav>
+                    <div class="burger-menu" id="burger-menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <ul class="nav-list-orange" id="nav-list">
+                        <li><a href="./index.html">О компании</a></li>
+                        <li><a href="./index.html">Путешествия</a></li>
+                        <li><a href="./index.html">Куда поехать</a></li>
+                        <li><a href="./index.html">Контакты</a></li>
+                        <div class="auth">
+                            <a href="./auto.html">Вход / Регистрация</a>
+                        </div>
+                    </ul>
+                    <style>
+                        .nav-list-orange li a:hover {
+                            color: orange;
+                        }
+                        .auth a:hover {
+                            color: orange;
+                        }
+                    </style>
+                </nav>
+            </div>
+        </div>
+    </header>        
+    <main class="main_autho">
+        <div class="container">
+            <section class="login-section">
+                <img src="./img/header/plane_autho.png" class="logo_autho" alt="Логотип">
+                <h1>Регистрация</h1>
+                <h2>Введите данные по форме ниже</h2>
+
+                <form id="registrationForm" class="form_reg">
+                    <label for="email">E-mail<span class="required">*</span></label>
+                    <input type="email" id="email" name="email" placeholder="Введите E-mail" required>
+                    <span class="error-message" id="emailError"></span>
+            
+                    <label for="username">Имя пользователя<span class="required">*</span></label>
+                    <input type="text" id="username" name="username" placeholder="Введите имя пользователя" required>
+                    <span class="error-message" id="usernameError"></span>
+            
+                    <label for="password">Пароль<span class="required">*</span></label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+                        <span class="toggle-password" id="togglePassword"></span>
+                    </div>
+                    <span class="error-message" id="passwordError"></span>
+            
+                    <label for="confirmPassword">Повторите пароль<span class="required">*</span></label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Введите пароль" required>
+                    <span class="error-message" id="confirmPasswordError"></span>
+            
+                    <p>Нажимая кнопку «Зарегистрироваться» вы даёте согласие на <a href="#" class="orange-text">обработку своих персональных данных</a></p>
+                    <button type="submit">Зарегистрироваться</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <script src="./js/main.js"></script>
+</body>
+</html>
