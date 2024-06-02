@@ -67,6 +67,9 @@ df_combined['ch_code'] = df_combined['ch_code'].map(ch_code_to_id)
 # Извлечение часов из столбца 'dep_time'
 df_combined['dep_time'] = df_combined['dep_time'].str.split(':').str[0].astype(int)
 
+
+df_combined['dep_time'] = df_combined['dep_time'] / 23.0
+
 # Функция для обработки столбца 'stop'
 df_combined['stop'] = df_combined['stop'].str.strip()
 def process_stop(row):
@@ -96,6 +99,9 @@ df_combined = df_combined.dropna(subset=['stop'])
 
 # Извлечение часов из столбца 'dep_time'
 df_combined['arr_time'] = df_combined['arr_time'].str.split(':').str[0].astype(int)
+
+
+df_combined['arr_time'] = df_combined['arr_time'] / 23.0
 
 # Фильтрация по заданным значениям в столбце 'from'
 valid_from = ['Delhi', 'Mumbai', 'Kolkata', 'Bangalore', 'Hyderabad', 'Chennai']
