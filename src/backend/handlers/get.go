@@ -1,11 +1,18 @@
 package handlers
 
 import (
+	"database/sql"
+	"encoding/json"
+	"fly_easy/database"
+	_ "fly_easy/database"
 	"fmt"
 	"net/http"
 )
 
+// var db database.IDataBase = database.DB{}
+
 func GetLocationsList(w http.ResponseWriter, r *http.Request) {
+	database.Tmp()
 
 	fmt.Fprintln(w, "loclist")
 
