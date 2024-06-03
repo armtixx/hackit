@@ -8,11 +8,10 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
 
 base_path = os.path.dirname(os.path.abspath(__file__))
-assets_path = f"{base_path}/assets"
 out_path = f"{base_path}/out"
 
 # Загрузка данных из файла
-df = pd.read_excel(f"{assets_path}/processing.xlsx")
+df = pd.read_excel(f"{out_path}/processing.xlsx")
 
 # Разделение данных на признаки и целевую переменную
 selected_columns = ["date", "airline", "from", "to", "class", "price"]
