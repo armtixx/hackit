@@ -9,6 +9,7 @@ from tensorflow.keras.layers import Dense, Dropout
 
 base_path = os.path.dirname(os.path.abspath(__file__))
 out_path = f"{base_path}/out"
+model_path = f"{base_path}/model_out"
 
 # Загрузка данных из файла
 df = pd.read_excel(f"{out_path}/processing.xlsx")
@@ -50,5 +51,5 @@ df["forecast"] = model_keras.predict(scaler.transform(X)).astype(int)
 df.to_excel(f"{out_path}/processing_by_model.xlsx", index=False)
 
 # Сохранение нормализатора и модели 
-model_keras.save(f"{out_path}/model.h5")
-joblib.dump(scaler, f"{out_path}/scaler.pkl")
+model_keras.save(f"{model_path}/model.h5")
+joblib.dump(scaler, f"{model_path}/scaler.pkl")

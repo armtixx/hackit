@@ -13,13 +13,6 @@ o ╩ └─┘┴ ┴┴ ┴
 ╚  ┴─┘┴ ╚═╝┴ ┴└─┘ ┴
 ```
 
-
-# Navigation
-----
-<!--toc:start-->
-- [Database deployment](#database-deployment)
-<!--toc:end-->
-
 # Database deployment
 ----
 ```sh
