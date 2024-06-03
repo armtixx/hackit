@@ -13,7 +13,7 @@ def predict():
     if len(args) != 5 or not all(arg in args for arg in needed_args):
         return {"ok": False}, 400
 
-    return {"ok": True, "price": make_prediction(**args)}, 200
+    return {"ok": True, "price": make_prediction(*list(map(int, args.values())))}, 200
 
 if __name__ == "__main__":
     app.run(host=HOST, port=PORT, debug=True)

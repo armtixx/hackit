@@ -15,11 +15,19 @@ data = {
 	"to_id": to_id,
 	"flight_class": flight_class,
 }
+data = {k: v.value for k,v in data.items()}
 
 url = f"http://{HOST}:{PORT}/predict"
 
-req = requests.get(url, params=data)
+try:
+    req = requests.get(url, params=data)
+    if req.status_code == 200:
+        price = req.json().get("price")
+        print(f"Цена: {price}")
+    else:
+        print("Сервер вернул ошибку, проверьте данные")
+except requests.exceptions.ConnectionError:
+    print("Не удалось отправить запрос")
+except Exception as e:
+    print("Не удалось отправить запрос: ", e)
 
-if req.status_code == 200:
-    price = req.json().get("price")
-    print(f"Predicted price: {price}")

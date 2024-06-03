@@ -15,6 +15,15 @@ o ╩ └─┘┴ ┴┴ ┴
 
 # Пошаговая инструкция по запуску
 ----
+## Создание виртуального окружения и установка зависимостей
+```sh
+python -m venv venv
+source venv/bin/activate
+pip install requirements.txt
+```
+
+## Запуск
+----
 1. Входные тестовые данные подаются в файле "model_training/assets/train.xlsx"
 2. Запустите файл "model_training/processing_data_frame.py"
 3. Запустите файл "model_training/model.py"
