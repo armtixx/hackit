@@ -1,11 +1,17 @@
+import os
+import joblib
 import numpy as np
 from tensorflow.keras.models import load_model # type: ignore
-import joblib
+
+# Определение пути до директории скрипта
+script_dir = os.path.dirname(__file__)
+model_file_path = os.path.join(script_dir, 'model.h5')
+scaler_file_path = os.path.join(script_dir, 'scaler.pkl')
 
 # Загрузка модели и нормализатора
 def load_model_and_scaler():
-    model = load_model('/home/scrumpovi4/ML/hackit/src/ml/model.h5')  # Загрузите всю модель
-    scaler = joblib.load('/home/scrumpovi4/ML/hackit/src/ml/scaler.pkl')
+    model = load_model(model_file_path)
+    scaler = joblib.load(scaler_file_path)
     return model, scaler
 
 model_keras, scaler = load_model_and_scaler()

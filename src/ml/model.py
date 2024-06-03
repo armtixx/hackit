@@ -1,24 +1,22 @@
-from urllib import request
-from flask import Flask, jsonify
-import numpy as np
+import os
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-from sklearn.linear_model import LinearRegression
+import joblib
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_absolute_percentage_error
 from sklearn.preprocessing import StandardScaler
-
-import tensorflow as tf
-from tensorflow import keras
+from sklearn.metrics import mean_absolute_percentage_error
 from tensorflow.keras.models import Sequential # type: ignore
 from tensorflow.keras.layers import Dense, Dropout # type: ignore
+from tensorflow.keras.callbacks import EarlyStopping # type: ignore
 
-import joblib
+# Определение пути до директории скрипта
+script_dir = os.path.dirname(__file__)
+file_path = os.path.join(script_dir, 'processing.xlsx')
+output_file_path = os.path.join(script_dir, 'processing_by_model.xlsx')
+model_file_path = os.path.join(script_dir, 'model.h5')
+scaler_file_path = os.path.join(script_dir, 'scaler.pkl')
 
-# Загрузка данных из файла
-df = pd.read_excel('/home/scrumpovi4/ML/hackit/src/ml/processing.xlsx')
+# Загрузка данных из файла с использованием относительного пути
+df = pd.read_excel(file_path)
 
 # Разделение данных на признаки и целевую переменную
 selected_columns = ['date', 'airline', 'from', 'to', 'class', 'price']
@@ -54,8 +52,8 @@ history = model_keras.fit(X_train, y_train, epochs=200, batch_size=32, validatio
 df['forecast'] = model_keras.predict(scaler.transform(X)).astype(int)
 
 # Сохранение данных в файл "processing_by_model.xlsx"
-df.to_excel('/home/scrumpovi4/ML/hackit/src/ml/processing_by_model.xlsx', index=False)
+df.to_excel(output_file_path, index=False)
 
 # Сохранение нормализатора и модели 
-model_keras.save('/home/scrumpovi4/ML/hackit/src/ml/model.h5')
-joblib.dump(scaler, '/home/scrumpovi4/ML/hackit/src/ml/scaler.pkl')
+model_keras.save(model_file_path)
+joblib.dump(scaler, scaler_file_path)

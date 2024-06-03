@@ -1,7 +1,10 @@
+import os
 import pandas as pd
 
-# Пути к файлам
-file_path = '/home/scrumpovi4/ML/hackit/src/ml/train.xlsx'
+# Определение пути до директории скрипта
+script_dir = os.path.dirname(__file__)
+file_path = os.path.join(script_dir, 'train.xlsx')
+output_file_path = os.path.join(script_dir, 'processing.xlsx')
 
 # Загрузка данных из файла Train.xlsx
 xls = pd.ExcelFile(file_path)
@@ -159,6 +162,6 @@ df_combined['class'] = df_combined.apply(process_class, axis=1)
 # Обработка столбца 'price'
 df_combined['price'] = df_combined['price'].str.replace(',', '').astype(int)
 
-df_combined.to_excel('/home/scrumpovi4/ML/hackit/src/ml/processing.xlsx', index=False)
+df_combined.to_excel(output_file_path, index=False)
 
 print("Обработка завершена")
