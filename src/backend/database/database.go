@@ -53,12 +53,8 @@ type DB struct {
 func (d *DB) Connect() error {
 	var err error = nil
 	d.db, err = sql.Open("mysql", d.url)
-	if err != nil {
-		return err
-	}
-	if err = d.db.Ping(); err != nil {
-		return err
-	}
+	if err != nil { return err }
+	if err = d.db.Ping(); err != nil { return err }
 	return err
 }
 
@@ -77,25 +73,19 @@ func (d *DB) GetLocationsAndMinPrice() (LocPrices, error) {
   `
 
 	rows, err := db.Query(query)
-	if err != nil {
-		return LocPrices{}, err
-	}
+	if err != nil { return LocPrices{}, err }
 
 	var data LocPrices
 	for rows.Next() {
 		var loc LocationAndPrice
 		err := rows.Scan(&loc.Name, &loc.Price)
-		if err != nil {
-			return LocPrices{}, err
-		}
+		if err != nil { return LocPrices{}, err }
 
 		data = append(data, loc)
 	}
 
 	err = rows.Err()
-	if err != nil {
-		return LocPrices{}, err
-	}
+	if err != nil { return LocPrices{}, err }
 
 	return data, nil
 }
@@ -109,24 +99,18 @@ func (d *DB) GetPopularLocations() (Locations, error) {
   `
 
 	rows, err := db.Query(query)
-	if err != nil {
-		return Locations{}, err
-	}
+	if err != nil { return Locations{}, err }
 
 	var data Locations
 	for rows.Next() {
 		var loc string
 		err := rows.Scan(&loc)
-		if err != nil {
-			return Locations{}, err
-		}
+		if err != nil { return Locations{}, err }
 		data = append(data, loc)
 	}
 
 	err = rows.Err()
-	if err != nil {
-		return Locations{}, err
-	}
+	if err != nil { return Locations{}, err }
 
 	return data, nil
 }
@@ -147,14 +131,10 @@ func (d *DB) GetUserByID(uid int) (User, error) {
 		&data.LastName, &data.SurName,
 		&data.Email, &data.PhoneNumber,
 	)
-	if err != nil {
-		return User{}, err
-	}
+	if err != nil { return User{}, err }
 
 	err = row.Err()
-	if err != nil {
-		return User{}, err
-	}
+	if err != nil { return User{}, err }
 
 	return data, nil
 }
@@ -175,14 +155,10 @@ func (d *DB) GetUserByEmail(email string) (User, error) {
 		&data.LastName, &data.SurName,
 		&data.Email, &data.PhoneNumber,
 	)
-	if err != nil {
-		return User{}, err
-	}
+	if err != nil { return User{}, err }
 
 	err = row.Err()
-	if err != nil {
-		return User{}, err
-	}
+	if err != nil { return User{}, err }
 
 	return data, nil
 }
@@ -199,9 +175,7 @@ func (d *DB) GetUserTicketsByID(uid int) (Tickets, error) {
   `
 
 	rows, err := db.Query(query, uid)
-	if err != nil {
-		return Tickets{}, err
-	}
+	if err != nil { return Tickets{}, err }
 
 	var data Tickets
 	for rows.Next() {
@@ -213,16 +187,12 @@ func (d *DB) GetUserTicketsByID(uid int) (Tickets, error) {
 			&ticket.DepTime, &ticket.DepDate,
 		)
 
-		if err != nil {
-			return Tickets{}, err
-		}
+		if err != nil { return Tickets{}, err }
 		data = append(data, ticket)
 	}
 
 	err = rows.Err()
-	if err != nil {
-		return Tickets{}, err
-	}
+	if err != nil { return Tickets{}, err }
 	return data, nil
 }
 
@@ -238,23 +208,17 @@ func (d *DB) GetUserFavoriteLocations(uid int) (Locations, error) {
   `
 
 	rows, err := db.Query(query, uid)
-	if err != nil {
-		return Locations{}, err
-	}
+	if err != nil { return Locations{}, err }
 
 	var data Locations
 	for rows.Next() {
 		var loc string
 		err := rows.Scan(&loc)
-		if err != nil {
-			return Locations{}, err
-		}
+		if err != nil { return Locations{}, err }
 		data = append(data, loc)
 	}
 	err = rows.Err()
-	if err != nil {
-		return Locations{}, err
-	}
+	if err != nil { return Locations{}, err }
 
 	return data, nil
 }
@@ -279,9 +243,7 @@ func (d *DB) GetTicketsByCitesAndDate(derlocid, arrlocid int, date1, date2 strin
 		derlocid, arrlocid,
 		Isbusinss,
 	)
-	if err != nil {
-		return Tickets{}, err
-	}
+	if err != nil { return Tickets{}, err }
 
 	var data Tickets
 	for rows.Next() {
@@ -300,16 +262,12 @@ func (d *DB) GetTicketsByCitesAndDate(derlocid, arrlocid int, date1, date2 strin
 		ticket.ArriveDate = fmt.Sprintf("%v-%v-%v", arriveDate.Year(), int(arriveDate.Month()), arriveDate.Day())
 		ticket.ArriveTime = fmt.Sprintf("%v:%v:00", arriveDate.Hour(), arriveDate.Minute())
 
-		if err != nil {
-			return Tickets{}, err
-		}
+		if err != nil { return Tickets{}, err }
 		data = append(data, ticket)
 	}
 
 	err = rows.Err()
-	if err != nil {
-		return Tickets{}, err
-	}
+	if err != nil { return Tickets{}, err }
 	return data, nil
 }
 
@@ -324,12 +282,8 @@ func (d *DB) AddUser(user User, passwordHash string) (bool, error) {
   `
 
 	result, err := db.Exec(query, user.Name, user.Email, passwordHash)
-	if err != nil {
-		return false, err
-	}
-	if count, _ := result.RowsAffected(); count == 0 {
-		return false, nil
-	}
+	if err != nil { return false, err }
+	if count, _ := result.RowsAffected(); count == 0 { return false, nil }
 	return true, nil
 }
 
@@ -344,12 +298,8 @@ func (d *DB) AddTicketToFavorite(uid, locid int) (bool, error) {
   `
 
 	result, err := db.Exec(query, uid, locid)
-	if err != nil {
-		return false, err
-	}
-	if count, _ := result.RowsAffected(); count == 0 {
-		return false, nil
-	}
+	if err != nil { return false, err }
+	if count, _ := result.RowsAffected(); count == 0 { return false, nil }
 	return true, nil
 }
 
@@ -371,12 +321,8 @@ func (d *DB) UpdateUserInfo(uid int, user User) (bool, error) {
 		uid,
 	)
 
-	if err != nil {
-		return false, err
-	}
-	if count, _ := result.RowsAffected(); count == 0 {
-		return false, nil
-	}
+	if err != nil { return false, err }
+	if count, _ := result.RowsAffected(); count == 0 { return false, nil }
 	return true, nil
 }
 
@@ -389,12 +335,8 @@ func (d *DB) DeleteUser(uid int) (bool, error) {
   `
 
 	result, err := db.Exec(query, uid)
-	if err != nil {
-		return false, err
-	}
-	if count, _ := result.RowsAffected(); count == 0 {
-		return false, nil
-	}
+	if err != nil { return false, err }
+	if count, _ := result.RowsAffected(); count == 0 { return false, nil }
 	return true, nil
 
 }
@@ -408,12 +350,8 @@ func (d *DB) DeleteTicketFromFavorite(uid, locid int) (bool, error) {
   `
 
 	result, err := db.Exec(query, uid, locid)
-	if err != nil {
-		return false, err
-	}
-	if count, _ := result.RowsAffected(); count == 0 {
-		return false, nil
-	}
+	if err != nil { return false, err }
+	if count, _ := result.RowsAffected(); count == 0 { return false, nil }
 	return true, nil
 }
 

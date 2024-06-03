@@ -4,7 +4,7 @@ _base="$(dirname "$0")"
 _base="$(realpath "$_base")"
 
 main() {
-  python "$_base/server.py"
+  python -m http.server -d "$_base" -b "$FLYEASY_HOST" "$FLYEASY_FRONTEND_PORT"
 }
 
 main
