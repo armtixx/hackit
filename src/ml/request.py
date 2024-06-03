@@ -16,6 +16,7 @@ data = {
 	"flight_class": flight_class,
 }
 data = {k: v.value for k,v in data.items()}
+print(data)
 
 url = f"http://{HOST}:{PORT}/predict"
 
