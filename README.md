@@ -18,9 +18,9 @@ o ╩ └─┘┴ ┴┴ ┴
 <!--toc:start-->
 - [FlyEasy](#flyeasy)
 - [Get started:](#get-started)
-        - [Clone repo:](#clone-repo)
-        - [Configure database settings:](#configure-database-settings)
-        - [Run app](#run-app)
+    - [Clone repo:](#clone-repo)
+    - [Configure database settings:](#configure-database-settings)
+    - [Run app](#run-app)
 - [Links](#links)
 <!--toc:end-->
 
