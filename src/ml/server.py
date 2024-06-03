@@ -1,23 +1,19 @@
 from flask import Flask, request
-from load_model import make_prediction
+from model import make_prediction
+from config import HOST, PORT
 
 app = Flask(__name__)
 
+needed_args = [ "date", "airline", "from_id", "to_id", "flight_class" ]
+
 @app.route("/predict")
 def predict():
-    data = request.get_json()
-    
-    # Extracting required fields
-    date = data['date']
-    airline = data['airline']
-    from_id = data['from']
-    to_id = data['to']
-    flight_class = data['class']
+    args = request.args
 
-    input_data = [date, airline, from_id, to_id, flight_class]
-    
-    return {"price": make_prediction(*input_data)}
+    if len(args) != 5 or not all(arg in args for arg in needed_args):
+        return {"ok": False}, 400
 
-if __name__ == '__main__':
-    app.run(port=8080, debug=True)
-    
+    return {"ok": True, "price": make_prediction(**args)}, 200
+
+if __name__ == "__main__":
+    app.run(host=HOST, port=PORT, debug=True)
