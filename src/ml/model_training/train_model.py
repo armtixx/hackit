@@ -3,9 +3,9 @@ import joblib
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.callbacks import EarlyStopping
 
 base_path = os.path.dirname(os.path.abspath(__file__))
 out_path = f"{base_path}/out"
@@ -41,8 +41,20 @@ def build_model(input_shape):
     model.compile(optimizer="adam", loss="mean_squared_error")
     return model
 
+# Создание коллбэка EarlyStopping
+early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True)
+
 model_keras = build_model((X_train.shape[1],))
-history = model_keras.fit(X_train, y_train, epochs=200, batch_size=32, validation_split=0.2, verbose=1)
+history = model_keras.fit(
+    X_train, y_train, 
+    epochs=150, batch_size=32, 
+    validation_split=0.2, verbose=1, 
+    callbacks=[early_stopping]
+)
+
+# Оценка модели на тестовых данных
+test_loss = model_keras.evaluate(X_test, y_test)
+print(f"Test Loss: {test_loss}")
 
 # Добавление прогнозируемых значений в новый столбец "forecast"
 df["forecast"] = model_keras.predict(scaler.transform(X)).astype(int)
