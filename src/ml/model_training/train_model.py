@@ -1,6 +1,7 @@
 import os
 import joblib
 import pandas as pd
+from sklearn.metrics import mean_absolute_percentage_error
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.models import Sequential
@@ -54,7 +55,11 @@ history = model_keras.fit(
 
 # Оценка модели на тестовых данных
 test_loss = model_keras.evaluate(X_test, y_test)
-print(f"Test Loss: {test_loss}")
+
+# Вычисление MAPE для тестовых данных
+y_test_pred = model_keras.predict(X_test)
+test_mape = mean_absolute_percentage_error(y_test, y_test_pred)
+print(f"Test MAPE: {test_mape}")
 
 # Добавление прогнозируемых значений в новый столбец "forecast"
 df["forecast"] = model_keras.predict(scaler.transform(X)).astype(int)
