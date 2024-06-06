@@ -2,11 +2,11 @@ import requests
 from data_types import *
 from config import HOST, PORT
 
-date = Months.JANUARY
-airline = Airlines.INDIGO
-from_id = Locations.MUMBAI
-to_id = Locations.DELHI
-flight_class = FlightClasses.BUSINESS
+date = Months.MARCH
+airline = Airlines.GO_FIRST
+from_id = Locations.BANGALORE
+to_id = Locations.KOLKATA
+flight_class = FlightClasses.ECONOMY
 
 data = {
     "date": date,
