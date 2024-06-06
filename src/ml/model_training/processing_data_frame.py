@@ -22,6 +22,14 @@ df_business["class"] = "business"
 # Объединение данных в один датафрейм
 df_combined = pd.concat([df_economy, df_business])
 
+# Функция для преобразования времени в минуты
+def time_to_minutes(time_str):
+    try:
+        hours, minutes = map(int, time_str.split(":"))
+        return hours * 60 + minutes
+    except (ValueError, IndexError):
+        return None
+
 # Удаление дубликатов одновременно по столбцам "airline", "from", "to", "price"
 df_combined.drop_duplicates(subset=["airline", "from", "to", "price"], keep="first", inplace=True)
 
@@ -56,24 +64,24 @@ df_combined = df_combined[df_combined["ch_code"].isin(valid_ch_code)]
 
 # Создание словаря для сопоставления авиакомпаний и их ID
 ch_code_to_id = {
-    "UK": 10,
-    "AI": 20,
-    "6E": 30,
-    "G8": 40,
-    "I5": 50,
-    "SG": 60,
-    "S5": 70,
-    "2T": 80
+    "UK": 1,
+    "AI": 2,
+    "6E": 3,
+    "G8": 4,
+    "I5": 5,
+    "SG": 6,
+    "S5": 7,
+    "2T": 8
 }
 
 # Присвоение ID каждой авиакомпании
 df_combined["ch_code"] = df_combined["ch_code"].map(ch_code_to_id)
 
-# Извлечение часов из столбца "dep_time"
-df_combined["dep_time"] = df_combined["dep_time"].str.split(":").str[0].astype(int)
+# Применение функции к столбцу "arr_time"
+df_combined["arr_time"] = df_combined["arr_time"].apply(time_to_minutes)
 
-
-df_combined["dep_time"] = df_combined["dep_time"] / 23.0
+# Применение функции к столбцу "dep_time"
+df_combined["dep_time"] = df_combined["dep_time"].apply(time_to_minutes)
 
 # Функция для обработки столбца "stop"
 df_combined["stop"] = df_combined["stop"].str.strip()
@@ -102,12 +110,6 @@ df_combined["time_taken"] = df_combined["time_taken"].apply(time_to_minutes)
 # Удаление строк, в которых значение столбца "stop" не соответствует условиям
 df_combined = df_combined.dropna(subset=["stop"])
 
-# Извлечение часов из столбца "dep_time"
-df_combined["arr_time"] = df_combined["arr_time"].str.split(":").str[0].astype(int)
-
-
-df_combined["arr_time"] = df_combined["arr_time"] / 23.0
-
 # Фильтрация по заданным значениям в столбце "from"
 valid_from = ["Delhi", "Mumbai", "Kolkata", "Bangalore", "Hyderabad", "Chennai"]
 df_combined = df_combined[df_combined["from"].isin(valid_from)]
@@ -117,12 +119,12 @@ df_combined = df_combined.dropna(subset=["from"])
 
 # Создание словаря для сопоставления авиакомпаний и их ID
 from_to_id = {
-    "Delhi": 11,
-    "Mumbai": 12,
-    "Kolkata": 13,
-    "Bangalore": 14,
-    "Hyderabad": 15,
-    "Chennai": 16,
+    "Delhi": 1,
+    "Mumbai": 2,
+    "Kolkata": 3,
+    "Bangalore": 4,
+    "Hyderabad": 5,
+    "Chennai": 6,
 }
 
 # Присвоение ID 
@@ -137,16 +139,22 @@ df_combined = df_combined.dropna(subset=["to"])
 
 # Создание словаря для сопоставления авиакомпаний и их ID
 to_to_id = {
-    "Delhi": 11,
-    "Mumbai": 12,
-    "Kolkata": 13,
-    "Bangalore": 14,
-    "Hyderabad": 15,
-    "Chennai": 16,
+    "Delhi": 1,
+    "Mumbai": 2,
+    "Kolkata": 3,
+    "Bangalore": 4,
+    "Hyderabad": 5,
+    "Chennai": 6,
 }
 
 # Присвоение ID 
 df_combined["to"] = df_combined["to"].map(to_to_id)
+
+# Удаление столбца num_code
+df_combined.drop(columns=["num_code"], inplace=True)
+
+# Удаление столбца ch_code
+df_combined.drop(columns=["ch_code"], inplace=True)
 
 # Функция для обработки столбца "class"
 def process_class(row):
@@ -159,7 +167,6 @@ def process_class(row):
 
 # Применение функции к столбцу "class"
 df_combined["class"] = df_combined.apply(process_class, axis=1)
-
 
 # Обработка столбца "price"
 df_combined["price"] = df_combined["price"].str.replace(",", "").astype(int)

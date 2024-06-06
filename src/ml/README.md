@@ -105,33 +105,30 @@ class Airlines(Enum):
     SPICEJET = 6
     STARAIR = 7
     TRUJET = 8
-}
 ```
 
 ##### Откуда
 ----
 ```python
 class Locations(Enum):
-    DELHI = 11
-    MUMBAI = 12
-    KOLKATA = 13
-    BANGALORE = 14
-    HYDERABAD = 15
-    CHENNAI = 16
+    DELHI = 1
+    MUMBAI = 2
+    KOLKATA = 3
+    BANGALORE = 4
+    HYDERABAD = 5
+    CHENNAI = 6
 ```
-
 
 ##### Куда
 ----
 ```python
 class Locations(Enum):
-    DELHI = 11
-    MUMBAI = 12
-    KOLKATA = 13
-    BANGALORE = 14
-    HYDERABAD = 15
-    CHENNAI = 16
-}
+    DELHI = 1
+    MUMBAI = 2
+    KOLKATA = 3
+    BANGALORE = 4
+    HYDERABAD = 5
+    CHENNAI = 6
 ```
 
 ##### Выбор Класса
